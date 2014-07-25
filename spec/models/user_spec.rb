@@ -47,6 +47,11 @@ describe User do
         expect(@user).to be_valid
       end
     end
+    it "should be downcased in the database" do
+      @user.email = "mYeMaIl@cRaZyCaSe.net" 
+      @user.save
+      expect(@user.reload.email).to eq("myemail@crazycase.net")
+    end
   end
 
   describe "when email address is already taken" do
