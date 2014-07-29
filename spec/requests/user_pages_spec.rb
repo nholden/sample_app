@@ -56,15 +56,10 @@ describe "User pages" do
         expect { click_button submit }.to change(User, :count).by(1)
       end
 
-      it "should redirect to the new user's profile" do
-        click_button submit
-        should have_content('Example User')
-        should have_title('Example User')
-      end
-
-      it "should flash the success message" do
-        click_button submit
-        should have_content('Welcome to the Sample App!')
+      describe "after saving the user" do
+        before { click_button submit }
+        it { should have_title('Example User') }
+        it { should have_content('Welcome to the Sample App!') }
       end
     end
   end
