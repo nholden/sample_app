@@ -27,8 +27,20 @@ describe "User pages" do
     let(:submit) { "Create my account" }
 
     describe "with invalid information" do
+      before do
+        fill_in "Name",         with: "Example User"
+        fill_in "Email",        with: "user@example..com"
+        fill_in "Password",     with: "foobar"
+        fill_in "Confirmation", with: "foobar"
+      end
+
       it "should not create a user" do
         expect { click_button submit }.not_to change(User, :count)
+      end
+
+      it "should return an error message" do
+        click_button submit
+        should have_content('Email is invalid') 
       end
     end
 
