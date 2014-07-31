@@ -60,6 +60,12 @@ describe "User pages" do
         before { click_button submit }
         it { should have_title('Example User') }
         it { should have_content('Welcome to the Sample App!') }
+        it { should have_selector('div.alert.alert-success', text: 'Welcome to the Sample App!') }
+
+        describe "followed by signout" do
+          before { click_link "Sign out" }
+          it { should have_link('Sign in') }
+        end
       end
     end
   end
