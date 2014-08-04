@@ -27,12 +27,7 @@ describe "User pages" do
     let(:submit) { "Create my account" }
 
     describe "with invalid information" do
-      before do
-        fill_in "Name",         with: "Example User"
-        fill_in "Email",        with: "user@example..com"
-        fill_in "Password",     with: "foobar"
-        fill_in "Confirmation", with: "foobar"
-      end
+      before { create_user_with_email("user@example..com") }
 
       it "should not create a user" do
         expect { click_button submit }.not_to change(User, :count)
@@ -45,12 +40,7 @@ describe "User pages" do
     end
 
     describe "with valid information" do
-      before do
-        fill_in "Name",         with: "Example User"
-        fill_in "Email",        with: "user@example.com"
-        fill_in "Password",     with: "foobar"
-        fill_in "Confirmation", with: "foobar"
-      end
+      before { create_user_with_email("user@example.com") }
 
       it "should create a user" do
         expect { click_button submit }.to change(User, :count).by(1)
@@ -60,7 +50,7 @@ describe "User pages" do
         before { click_button submit }
         it { should have_title('Example User') }
         it { should have_content('Welcome to the Sample App!') }
-        it { should have_selector('div.alert.alert-success', text: 'Welcome to the Sample App!') }
+        it { should have_success_message('Welcome to the Sample App!') }
 
         describe "followed by signout" do
           before { click_link "Sign out" }
