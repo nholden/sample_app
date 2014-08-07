@@ -9,6 +9,8 @@ describe "Authentication" do
 
     it { should have_content('Sign in') }
     it { should have_title('Sign in') }
+    it { should_not have_link('Profile') }
+    it { should_not have_link('Settings') }
 
     describe "with invalid information" do
       before { click_button "Sign in" }
@@ -41,11 +43,9 @@ describe "Authentication" do
       let(:user) { FactoryGirl.create(:user) }
     
       describe "when attempting to visit a protected page" do
-        before do
+        before do 
+          sign_in user 
           visit edit_user_path(user)
-          fill_in "Email", with: user.email
-          fill_in "Password", with: user.password
-          click_button "Sign in"
         end
 
         describe "after signing in" do
