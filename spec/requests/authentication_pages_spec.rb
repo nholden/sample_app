@@ -103,8 +103,23 @@ describe "Authentication" do
         specify { expect(response).to redirect_to(root_url) }
       end
 
+      describe "submitting a GET request to the Users#new action" do
+        before { get signup_path }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+
       describe "submitting a POST request to the Users#create action" do
-        before { post user_path }
+        before { post users_path, user: user }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+    end
+
+    describe "as an admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      before { sign_in admin, no_capybara: true}
+
+      describe "submitting a DELETE request with self" do
+        before { delete user_path(admin) }
         specify { expect(response).to redirect_to(root_url) }
       end
     end
