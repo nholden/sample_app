@@ -29,6 +29,18 @@ describe "MicropostPages" do
         expect { click_button "Post" }.to change(Micropost, :count).by(1)
       end
     end
+
+    describe "as a reply" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      before do
+        fill_in 'micropost_content', with: "@#{other_user.handle.upcase} Lorem ipsum"
+        click_button "Post"
+      end 
+
+      it "should add the replied to user's id to the in_reply_to column" do
+        expect(Micropost.last.in_reply_to).to eq(user.id)
+      end
+    end
   end
 
   describe "micropost destruction" do

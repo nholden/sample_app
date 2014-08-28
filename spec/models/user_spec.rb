@@ -175,7 +175,9 @@ describe User do
 
       before do
         @user.follow!(followed_user)
-        3.times { followed_user.microposts.create!(content: "Lorem ipsum") }
+        followed_user.microposts.create!(content: "Lorem ipsum") 
+        followed_user.microposts.create!(content: "@#{followed_user.handle.upcase} Lorem ipsum")
+        followed_user.microposts.create!(content: "@another_user Lorem ipsum")
       end
 
       its(:feed) { should include(newer_micropost) }
@@ -183,7 +185,11 @@ describe User do
       its(:feed) { should_not include(unfollowed_post) }
       its(:feed) do
         followed_user.microposts.each do |micropost|
-          should include(micropost)
+          if micropost.content = "@another_user Lorem ipsum"
+            should_not include(micropost)
+          else
+            should include(micropost)
+          end
         end
       end
     end
