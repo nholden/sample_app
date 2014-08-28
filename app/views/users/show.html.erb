@@ -4,8 +4,9 @@
     <section>
       <h1>
         <%= gravatar_for @user %> 
-        <%= @user.name %></h1>
+        <%= @user.name %>
       </h1>
+      @<%= @user.handle %>
     </section>
     <section>
       <%= render 'shared/stats' %>

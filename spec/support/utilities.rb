@@ -20,7 +20,16 @@ end
 
 def create_user_with_email(email)
   fill_in "Name", with: "Example User"
+  fill_in "Handle", with: "ExampleHandle"
   fill_in "Email", with: email 
+  fill_in "Password", with: "foobar"
+  fill_in "Confirm Password", with: "foobar"
+end
+
+def create_user_with_handle(handle)
+  fill_in "Name", with: "Example User"
+  fill_in "Handle", with: handle
+  fill_in "Email", with: "example@email.net"
   fill_in "Password", with: "foobar"
   fill_in "Confirm Password", with: "foobar"
 end

@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe User do
-  before { @user = User.new(name: "Example User", email: "user@example.com", password: "foobar", password_confirmation: "foobar") }
+  before { @user = User.new(name: "Example User", email: "user@example.com", handle: "ExampleHandle", password: "foobar", password_confirmation: "foobar") }
 
   subject { @user }
 
   it { should respond_to(:name) }
   it { should respond_to(:email) }
+  it { should respond_to(:handle) }
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
@@ -82,6 +83,27 @@ describe User do
     end
     
     it { should_not be_valid}
+  end
+
+  describe "when handle is too long" do
+    before { @user.handle = "a"*50 }
+    it { should_not be_valid }
+  end
+
+  describe "when handle contains non-alphanumeric characters" do
+    before { @user.handle = "@nickyholden" }
+    it { should_not be_valid }
+  end
+
+  describe "when handle is taken" do
+    before do
+      user_with_same_handle = @user.dup
+      user_with_same_handle.email = "somethingelse@fake.com"
+      user_with_same_handle.handle = "examplehandle"
+      user_with_same_handle.save
+    end
+
+    it { should_not be_valid }
   end
 
   describe "when password is not present" do

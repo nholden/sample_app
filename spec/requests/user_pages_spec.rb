@@ -58,6 +58,7 @@ describe "User pages" do
 
     it { should have_content(user.name) }
     it { should have_title(user.name) }
+    it { should have_content(user.handle) }
 
     describe "microposts" do
       it { should have_content(m1.content) }
@@ -130,7 +131,7 @@ describe "User pages" do
 
     let(:submit) { "Create my account" }
 
-    describe "with invalid information" do
+    describe "with invalid email" do
       before { create_user_with_email("user@example..com") }
 
       it "should not create a user" do
@@ -140,6 +141,19 @@ describe "User pages" do
       it "should return an error message" do
         click_button submit
         should have_content('Email is invalid') 
+      end
+    end
+
+    describe "with invalid handle" do
+      before { create_user_with_handle("@nickyholden") }
+   
+      it "should not create a user" do
+        expect { click_button submit }.not_to change(User, :count)
+      end
+
+      it "should return an error message" do
+        click_button submit
+        should have_content('Handle is invalid')
       end
     end
 
@@ -185,9 +199,11 @@ describe "User pages" do
     describe "with valid information" do
       let(:new_name) { "New Name" }
       let(:new_email) { "new@example.com" }
+      let(:new_handle) { "NewHandle" }
       before do
         fill_in "Name", with: new_name
         fill_in "Email", with: new_email
+        fill_in "Handle", with: new_handle
         fill_in "Password", with: user.password
         fill_in "Confirm Password", with: user.password
         click_button "Save changes"
