@@ -38,7 +38,7 @@ describe "MicropostPages" do
       end 
 
       it "should add the replied to user's id to the in_reply_to column" do
-        expect(Micropost.last.in_reply_to).to eq(user.id)
+        expect(Micropost.find_by(content: "@#{other_user.handle.upcase} Lorem ipsum").in_reply_to).to eq(other_user.id)
       end
     end
   end

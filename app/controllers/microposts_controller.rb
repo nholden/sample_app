@@ -21,7 +21,14 @@ class MicropostsController < ApplicationController
   private
    
     def micropost_params
-      params.require(:micropost).permit(:content)
+      params.require(:micropost).permit(:content).merge(:in_reply_to => in_reply_to)
+    end
+
+    def in_reply_to
+      in_reply_to_handle = /(?<=^@)\w*/.match(params[:micropost][:content]).to_s
+      in_reply_to_user = User.where('lower(handle) = ?', in_reply_to_handle.downcase).first
+      return nil if in_reply_to_user.nil?
+      in_reply_to_user.id
     end
 
     def correct_user
