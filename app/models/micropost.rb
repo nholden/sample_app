@@ -1,6 +1,7 @@
 class Micropost < ActiveRecord::Base
   belongs_to :user
   default_scope -> { order('created_at DESC') }
+  scope :including_replies, ->(user) { where("in_reply_to = #{user.id}") } 
   validates :content, presence: true, length: { maximum: 140 }
   validates :user_id, presence: true
 
