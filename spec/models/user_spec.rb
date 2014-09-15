@@ -178,14 +178,20 @@ describe User do
         followed_user.microposts.create!(content: "Lorem ipsum") 
         followed_user.microposts.create!(content: "@#{@user.handle.upcase} Lorem ipsum", in_reply_to: @user.id)
         followed_user.microposts.create!(content: "@another_user Lorem ipsum", in_reply_to: -1)
+        @user.microposts.create!(content: "@another_user Lorem ipsum", in_reply_to: -1)
       end
 
       its(:feed) { should include(newer_micropost) }
       its(:feed) { should include(older_micropost) }
       its(:feed) { should_not include(unfollowed_post) }
       its(:feed) do
+        @user.microposts.each do |micropost|
+          should include(micropost)
+        end
+      end 
+      its(:feed) do
         followed_user.microposts.each do |micropost|
-          if micropost.in_reply_to == (@user.id || nil)
+          if micropost.in_reply_to == @user.id || micropost.in_reply_to.nil? 
             should include(micropost)
           else
             should_not include(micropost)
